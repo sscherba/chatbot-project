@@ -3,8 +3,7 @@
 const { Configuration, OpenAIApi } = require("openai");
 
 module.exports = async (req, res) => {
-  // 1. Set CORS headers so the browser allows requests from your GitHub Pages site
-  // Replace '*' with your domain for production, e.g.: 'https://sscherba.github.io'
+  // 1. Set CORS headers 
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
