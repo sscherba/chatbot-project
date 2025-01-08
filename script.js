@@ -1,7 +1,7 @@
 // chatbot-project/frontend/script.js
 
 // Adjust this URL once you have your Vercel deployment URL
-const BACKEND_URL = "https://chatbot-project-8d5o2bdm4-samanthas-projects-7267dbb8.vercel.app/";
+const BACKEND_URL = "https://chatbot-project-pink.vercel.app";
 
 const chatContainer = document.getElementById("chat-container");
 const userInput = document.getElementById("userMessage");
