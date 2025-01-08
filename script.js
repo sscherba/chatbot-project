@@ -1,27 +1,31 @@
-// chatbot-project/frontend/script.js
+// The backend endpoint hosted on Render
+const BACKEND_URL = "https://chatbot-project-2nt6.onrender.com/api/chat";
 
-// Adjust this URL once you have your Vercel deployment URL
-const BACKEND_URL = "https://chatbot-project-8d5o2bdm4-samanthas-projects-7267dbb8.vercel.app/";
-
+// DOM Elements
 const chatContainer = document.getElementById("chat-container");
 const userInput = document.getElementById("userMessage");
 const sendBtn = document.getElementById("send-btn");
 
-// Event listener for the Send button
+// Event listener for the "Send" button
 sendBtn.addEventListener("click", sendMessage);
 
-// Also send message when pressing Enter
+// Allow pressing "Enter" to send a message
 userInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     sendMessage();
   }
 });
 
+// Function to send a message
 function sendMessage() {
   const userMessage = userInput.value.trim();
-  if (!userMessage) return;
 
-  // Display the user's bubble
+  if (!userMessage) {
+    displayBubble("Please type a message!", "bot-bubble");
+    return;
+  }
+
+  // Display the user's message
   displayBubble(userMessage, "user-bubble");
 
   // Send the message to the backend
@@ -30,28 +34,36 @@ function sendMessage() {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ userMessage }),
   })
-    .then((res) => res.json())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
     .then((data) => {
       if (data.reply) {
-        // Display the bot's bubble
         displayBubble(data.reply, "bot-bubble");
+      } else {
+        displayBubble("Sorry, I didn't get that.", "bot-bubble");
       }
     })
-    .catch((err) => {
-      console.error("Error:", err);
-      displayBubble("Oops, something went wrong.", "bot-bubble");
+    .catch((error) => {
+      console.error("Error:", error);
+      displayBubble("Oops, something went wrong. Please try again.", "bot-bubble");
     })
     .finally(() => {
+      // Clear the input field
       userInput.value = "";
     });
 }
 
+// Function to display a chat bubble
 function displayBubble(text, className) {
   const bubble = document.createElement("div");
   bubble.classList.add("chat-bubble", className);
   bubble.innerText = text;
   chatContainer.appendChild(bubble);
 
-  // Scroll to the bottom
+  // Scroll to the bottom of the chat container
   chatContainer.scrollTop = chatContainer.scrollHeight;
 }
